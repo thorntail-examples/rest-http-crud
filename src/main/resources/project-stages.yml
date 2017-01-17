@@ -1,0 +1,17 @@
+
+swarm:
+  datasources:
+    data-sources:
+      ### [datasource]
+      MyDS:
+        driver-name: postgresql2
+        connection-url: jdbc:postgresql://localhost/postgres
+        user-name: postgres
+        password: postgres
+      ### [datasource]
+    jdbc-drivers:
+      ### [driver]
+      postgresql:
+        driver-class-name: org.postgresql.Driver
+        driver-module-name: org.postgresql
+      ### [driver]
