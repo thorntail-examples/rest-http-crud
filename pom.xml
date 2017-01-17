@@ -30,7 +30,7 @@
   <packaging>war</packaging>
 
   <name>SWARM-949</name>
-  <description>Obsidian :: Quickstart :: WildflySwarm - SWARM-949</description>
+  <description>Obsidian :: Quickstart :: SWARM-949</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

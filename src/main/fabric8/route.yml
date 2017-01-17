@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Route
 metadata:
-  name: wildfly-swarm-rest
+  name: swarm-949
 spec:
   port:
     targetPort: 8080
   to:
     kind: Service
-    name: wildfly-swarm-rest
+    name: swarm-949

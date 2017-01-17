@@ -28,14 +28,24 @@ Name | Description | Version
 [java][1] | Java JDK | 8
 [maven][2] | Apache Maven | 3.2.x 
 [oc][3] | OpenShift Client | v3.3.x
-[git][4] | Git version management | 2.x 
+[git][4] | Git version management | 2.x
+[postgres] | Postgres Database | 9.1
+[docker] | Docker | Latest
 
 [1]: http://www.oracle.com/technetwork/java/javase/downloads/
 [2]: https://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache/
 [3]: https://docs.openshift.com/enterprise/3.2/cli_reference/get_started_cli.html
 [4]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+[5]: https://hub.docker.com/_/postgres/
+[6]: https://docs.docker.com/engine/installation/
 
 In order to build and deploy this project, you must have an account on an OpenShift Online (OSO): https://console.dev-preview-int.openshift.com/ instance.
+
+# Start Postgres database
+
+```
+docker run --name postgres-db -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -d postgres
+```
 
 # Build the Project
 
@@ -52,21 +62,14 @@ mvn clean install
 1. Run the following command to start the maven goal of WildFlySwarm:
 
     ```
-    mvn wildfly-swarm:run
+    java -Dswarm.datasources.data-sources.MyDS.connection-url=jdbc:postgresql://<POSTGRES_IP>:5432/postgres -jar target/wildfy-swarm-949-1.0.0-SNAPSHOT-swarm.jar
     ```
 
 1. If the application launched without error, use the following command to access the REST endpoint exposed using curl or httpie tool:
 
     ```
-    http http://localhost:8080/greeting
-    curl http://localhost:8080/greeting
-    ```
-
-1. To pass a parameter for the Greeting Service, use the following HTTP request:
-
-    ```
-    http http://localhost:8080/greeting name==Charles
-    curl http://localhost:8080/greeting -d name=Bruno
+    http http://localhost:8080/
+    curl http://localhost:8080/
     ```
 
 # OpenShift Online
@@ -94,13 +97,8 @@ mvn clean install
 
 1. Use the Host or Port address to access the REST endpoint.
     ```
-    http http://<HOST_PORT_ADDRESS>/greeting
-    http http://<HOST_PORT_ADDRESS>/greeting name==Bruno
-
-    or 
-
-    curl http://<HOST_PORT_ADDRESS>/greeting
-    curl http://<HOST_PORT_ADDRESS>/greeting -d name=Bruno
+    http http://<HOST_PORT_ADDRESS>/
+    http http://<HOST_PORT_ADDRESS>/
     ```
 
 # Local Openshift Cluster 
