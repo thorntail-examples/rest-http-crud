@@ -11,7 +11,7 @@ You can perform this task in three different ways:
 
 # Prerequisites
 
-To get started with these quickstarts you'll need the following prerequisites:
+To get started with this quickstart you'll need the following prerequisites:
 
 Name | Description | Version
 --- | --- | ---
@@ -39,7 +39,7 @@ docker run --name postgres-db -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POST
 
 # Build the Project
 
-The project uses WildflySwarm to create and package the service.
+The project uses Wildfly Swarm to create and package the service.
 
 Execute the following maven command:
 
