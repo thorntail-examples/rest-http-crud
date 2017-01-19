@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Route
 metadata:
-  name: swarm-949
+  name: swarm-greenfield
 spec:
   port:
     targetPort: 8080
   to:
     kind: Service
-    name: swarm-949
+    name: swarm-greenfield

@@ -25,12 +25,12 @@
   </parent>
 
   <groupId>org.obsidiantoaster.quickstart</groupId>
-  <artifactId>wildfy-swarm-949</artifactId>
+  <artifactId>swarm-greenfield</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>SWARM-949</name>
-  <description>Obsidian :: Quickstart :: SWARM-949</description>
+  <name>swarm-greenfield</name>
+  <description>Obsidian :: Quickstart :: Wildfly Swarm Greenfield</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
