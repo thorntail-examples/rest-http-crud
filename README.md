@@ -1,7 +1,7 @@
 # Introduction
 
-Quickstart that shows how to generate a simple greenfield (“Hello World”) Restful Service and run it outside of openshift (locally on developer machine).
-It contains a rest endpoint that be used to verify a JDBC connection.
+Quickstart that shows how to generate a simple greenfield (“Hello World”) Restful Service and run it top of openshift.
+It contains a rest endpoint which is be used to verify a JDBC connection.
 
 You can perform this task in three different ways:
 
