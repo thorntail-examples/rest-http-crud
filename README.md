@@ -96,24 +96,3 @@ Using datasource driver: <DRIVER INSTANCE>
     http http://<HOST_PORT_ADDRESS>/
     http http://<HOST_PORT_ADDRESS>/
     ```
-
-# Local Openshift Cluster 
- 
- Alterntively to the openshift online approach, you might run an [openshift cluster locally](https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md)
- 
- ```
- oc cluster up --version=v1.4.0-rc1
- [...]
- OpenShift server started.
-   The server is accessible via web console at:
-       https://<HOST_PORT_ADDRESS>:8443
-
-   You are logged in as:
-       User:     developer
-       Password: developer
-
-   To login as administrator:
-       oc login -u system:admin
- ```
- 
- 
