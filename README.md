@@ -31,7 +31,7 @@ Name | Description | Version
 
 In order to build and deploy this project, you must have an account on an OpenShift Online (OSO): https://console.dev-preview-int.openshift.com/ instance.
 
-# Start the Postgres database
+# Start the PostgreSQL database
 
 ```
 docker run --name postgres-db -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -d postgres
