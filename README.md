@@ -1,23 +1,13 @@
 # Introduction
 
-This project exposes a simple REST endpoint where the service `greeting` is available at this address `http://hostname:port/greeting` and returns a JSON Greeting message
-
-```json
-{
-    "content": "Hello, World!",
-    "id": 1
-}
-
-```
-
-The id of the message is incremented for each request. 
-To customize the message, you can pass as parameter the name of the person that you want to send your greeting.
+Quickstart that shows how to generate a simple greenfield (“Hello World”) Restful Service and run it outside of openshift (locally on developer machine).
+It contains a rest endpoint that be used to verify a JDBC connection.
 
 You can perform this task in three different ways:
 
 1. Build and launch using WildflySwarm.
-1. Build and deploy using OpenShift.
-1. Build, deploy, and authenticate using OpenShift Online.
+2. Build and deploy using OpenShift.
+3. Build, deploy, and authenticate using OpenShift Online.
 
 # Prerequisites
 
@@ -27,10 +17,10 @@ Name | Description | Version
 --- | --- | ---
 [java][1] | Java JDK | 8
 [maven][2] | Apache Maven | 3.2.x 
-[oc][3] | OpenShift Client | v3.3.x
+[oc][3] | OpenShift Client Tools | v3.3.x
 [git][4] | Git version management | 2.x
-[postgres] | Postgres Database | 9.1
-[docker] | Docker | Latest
+[postgres][5] | Postgres Database | 9.1
+[docker][6] | Docker | Latest
 
 [1]: http://www.oracle.com/technetwork/java/javase/downloads/
 [2]: https://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache/
@@ -41,7 +31,7 @@ Name | Description | Version
 
 In order to build and deploy this project, you must have an account on an OpenShift Online (OSO): https://console.dev-preview-int.openshift.com/ instance.
 
-# Start Postgres database
+# Start the Postgres database
 
 ```
 docker run --name postgres-db -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -d postgres
@@ -71,6 +61,12 @@ mvn clean install
     http http://localhost:8080/
     curl http://localhost:8080/
     ```
+    
+If successful it returns JDBC driver info:
+
+```
+Using datasource driver: <DRIVER INSTANCE>
+```
 
 # OpenShift Online
 
