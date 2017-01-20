@@ -25,12 +25,12 @@
   </parent>
 
   <groupId>org.obsidiantoaster.quickstart</groupId>
-  <artifactId>swarm-greenfield</artifactId>
+  <artifactId>swarm-rest-jdbc</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>swarm-greenfield</name>
-  <description>Obsidian :: Quickstart :: Wildfly Swarm Greenfield</description>
+  <name>swarm-rest-jdbc</name>
+  <description>Wildfly Swarm : REST - JDBC</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

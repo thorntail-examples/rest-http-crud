@@ -1,7 +1,7 @@
 # Introduction
 
 Quickstart that shows how to generate a simple greenfield (“Hello World”) Restful Service and run it top of openshift.
-It contains a rest endpoint which is be used to verify a JDBC connection.
+It contains a rest endpoint which is used to verify a JDBC connection.
 
 You can perform this task in three different ways:
 
@@ -86,9 +86,9 @@ Using datasource driver: <DRIVER INSTANCE>
 1. Get the route url.
 
     ```
-    oc get route/wildfly-swarm-rest
+    oc get route/swarm-rest-jdbc
     NAME              HOST/PORT                                          PATH      SERVICE                TERMINATION   LABELS
-    wildfly-swarm-rest   <HOST_PORT_ADDRESS>             wildfly-swarm-rest:8080
+    swarm-rest-jdbc   <HOST_PORT_ADDRESS>             swarm-rest-jdbc:8080
     ```
 
 1. Use the Host or Port address to access the REST endpoint.
