@@ -181,12 +181,4 @@
       </build>
     </profile>
   </profiles>
-
-  <scm>
-    <connection>scm:git:git://github.com/obsidian-toaster/quick_rest_wildfly-swarm.git</connection>
-    <developerConnection>scm:git:git@github.com:obsidian-toaster/.git</developerConnection>
-    <url>http://github.com/obsidian-toaster/quick_rest_wildfly-swarm</url>
-    <tag>HEAD</tag>
-  </scm>
-
 </project>
