@@ -30,7 +30,7 @@
   <packaging>war</packaging>
 
   <name>swarm-rest-jdbc</name>
-  <description>Wildfly Swarm : REST - JDBC</description>
+  <description>WildFly Swarm : REST - JDBC</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
