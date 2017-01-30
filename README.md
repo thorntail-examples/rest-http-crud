@@ -5,7 +5,7 @@ It contains a rest endpoint which is used to verify a JDBC connection.
 
 You can perform this task in three different ways:
 
-1. Build and launch using WildflySwarm.
+1. Build and launch using WildFly Swarm.
 2. Build and deploy using OpenShift.
 3. Build, deploy, and authenticate using OpenShift Online.
 
@@ -39,7 +39,7 @@ docker run --name postgres-db -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POST
 
 # Build the Project
 
-The project uses Wildfly Swarm to create and package the service.
+The project uses WildFly Swarm to create and package the service.
 
 Execute the following maven command:
 
