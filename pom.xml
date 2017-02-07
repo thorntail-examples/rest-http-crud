@@ -164,6 +164,13 @@
                 </goals>
               </execution>
             </executions>
+            <configuration>
+              <generator>
+                <includes>
+                  <include>wildfly-swarm</include>
+                </includes>
+              </generator>
+            </configuration>
           </plugin>
           <plugin>
             <artifactId>maven-failsafe-plugin</artifactId>
