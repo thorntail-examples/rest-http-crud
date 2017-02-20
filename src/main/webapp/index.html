@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Data</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+<div class="header">
+	<input type="text" id="searchKey"/>
+	<button id="btnSearch">Search</button>
+	<button id="btnAdd">New</button>
+</div>
+
+
+<div class="leftArea">
+<ul id="dataList"></ul>
+</div>
+
+<form id="dataForm">
+	
+<div class="mainArea">
+
+<label>Id:</label>
+<input id="dataId" name="id" type="text" disabled />
+
+<label>Name:</label>
+<input type="text" id="name" name="name" required>
+
+<button id="btnSave">Save</button>
+<button id="btnDelete">Delete</button>
+
+</div>
+
+</form>
+
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

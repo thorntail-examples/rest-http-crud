@@ -86,6 +86,11 @@
 
     <dependency>
       <groupId>org.wildfly.swarm</groupId>
+      <artifactId>jpa</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
       <artifactId>datasources</artifactId>
     </dependency>
 
@@ -142,6 +147,12 @@
               <goal>package</goal>
             </goals>
           </execution>
+          <execution>
+            <id>start</id>
+          </execution>
+          <execution>
+            <id>stop</id>
+          </execution>
         </executions>
       </plugin>
     </plugins>
@@ -171,18 +182,6 @@
                 </includes>
               </generator>
             </configuration>
-          </plugin>
-          <plugin>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <version>2.19.1</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>integration-test</goal>
-                  <goal>verify</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
         </plugins>
       </build>
