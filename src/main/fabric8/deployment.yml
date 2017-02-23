@@ -1,10 +1,46 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: ${project.artifactId}
 spec:
+  replicas: 1
+  strategy:
+    rollingParams:
+      timeoutSeconds: 10800
+    type: Rolling
   template:
     spec:
       containers:
-        - readinessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 5
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: JAVA_APP_DIR
+          value: /deployments
+        - name: JAVA_OPTIONS
+          value: -Dswarm.datasources.data-sources.MyDS.connection-url=jdbc:postgresql://$(POSTGRESQL_92_CENTOS7_SERVICE_HOST):$(POSTGRESQL_92_CENTOS7_SERVICE_PORT)/fruits
+        name: swarm-rest-jdbc
+        image: swarm-rest-jdbc:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+        securityContext:
+          privileged: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - swarm-rest-jdbc
+      from:
+        kind: ImageStreamTag
+        name: swarm-rest-jdbc:latest
+    type: ImageChange

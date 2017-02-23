@@ -5,9 +5,9 @@ swarm:
       ### [datasource]
       MyDS:
         driver-name: postgresql
-        connection-url: jdbc:postgresql://localhost:5432/postgres
-        user-name: postgres
-        password: postgres
+        connection-url: jdbc:postgresql://localhost:5432/fruits
+        user-name: swarm
+        password: password
       ### [datasource]
     jdbc-drivers:
       ### [driver]
