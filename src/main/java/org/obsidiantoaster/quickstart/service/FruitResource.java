@@ -3,7 +3,6 @@ package org.obsidiantoaster.quickstart.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.naming.Context;
@@ -17,7 +16,6 @@ import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -72,13 +70,10 @@ public class FruitResource {
     @Produces("application/json")
     @Transactional
     public List search(@PathParam("token") String token) {
-        List<Fruit> fruits = em
-                .createNamedQuery("Fruits.findAll", Fruit.class)
-                .getResultList();
 
-        return fruits.stream()
-                .filter(f -> f.getName().contains(token))
-                .collect(Collectors.toList());
+        Query query = em.createQuery("Select f from Fruit f where f.name like ?1");
+        query.setParameter(1, token);
+        return query.getResultList();
     }
 
     @PUT
@@ -101,7 +96,8 @@ public class FruitResource {
     public Response delete(@PathParam("id") Integer id) {
         try {
 
-            Query query = em.createQuery("Select f from Fruit f where f.id=" + id);
+            Query query = em.createQuery("Select f from Fruit f where f.id=?1");
+            query.setParameter(1, id);
             Object match = query.getSingleResult();
             em.remove(match);
         } catch (Exception e) {
