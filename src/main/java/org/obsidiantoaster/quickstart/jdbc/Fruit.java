@@ -1,4 +1,4 @@
-package org.obsidiantoaster.quickstart.service;
+package org.obsidiantoaster.quickstart.jdbc;
 
 import java.io.Serializable;
 import java.util.Objects;

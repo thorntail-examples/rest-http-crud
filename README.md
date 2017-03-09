@@ -37,7 +37,7 @@ In order to build and deploy this project, you must have an account on an OpenSh
     oc login https://api.dev-preview-int.openshift.com --token=MYTOKEN
     ```
 
-3. Start the PostgreSQL database on openshift
+3. Start the PostgreSQL database on Openshift
 
   ```
   oc new-app -e POSTGRESQL_USER=swarm,POSTGRESQL_PASSWORD=password,POSTGRESQL_DATABASE=fruits openshift/postgresql-92-centos7

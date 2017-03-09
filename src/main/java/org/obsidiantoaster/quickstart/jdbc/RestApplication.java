@@ -1,4 +1,4 @@
-package org.obsidiantoaster.quickstart.service;
+package org.obsidiantoaster.quickstart.jdbc;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
