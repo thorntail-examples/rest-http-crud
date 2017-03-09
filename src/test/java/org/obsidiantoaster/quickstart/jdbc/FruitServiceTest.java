@@ -11,6 +11,8 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.wildfly.swarm.Swarm;
+import org.wildfly.swarm.arquillian.CreateSwarm;
 import org.wildfly.swarm.arquillian.DefaultDeployment;
 
 /**
@@ -19,6 +21,14 @@ import org.wildfly.swarm.arquillian.DefaultDeployment;
 @RunWith(Arquillian.class)
 @DefaultDeployment
 public class FruitServiceTest {
+
+    /**
+     * For the unit tests we leverage in in-memory database
+     */
+    @CreateSwarm
+    public static Swarm newContainer() throws Exception {
+        return new Swarm().withProfile("development");
+    }
 
     @Test
     @RunAsClient

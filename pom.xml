@@ -39,6 +39,7 @@
 
     <fabric8.version>2.2.176</fabric8.version>
     <version.wildfly.swarm>2017.3.3</version.wildfly.swarm>
+    <version.h2>1.4.187</version.h2>
 
     <fabric8.maven.plugin.version>3.1.92</fabric8.maven.plugin.version>
     <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
@@ -105,6 +106,12 @@
       <artifactId>resteasy-client</artifactId>
       <version>${version.resteasy}</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${version.h2}</version>
     </dependency>
 
     <dependency>
