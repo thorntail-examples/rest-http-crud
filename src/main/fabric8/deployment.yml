@@ -19,7 +19,7 @@ spec:
         - name: JAVA_APP_DIR
           value: /deployments
         - name: JAVA_OPTIONS
-          value: -Dswarm.datasources.data-sources.MyDS.connection-url=jdbc:postgresql://$(POSTGRESQL_92_CENTOS7_SERVICE_HOST):$(POSTGRESQL_92_CENTOS7_SERVICE_PORT)/fruits
+          value: -Dswarm.datasources.data-sources.MyDS.connection-url=jdbc:postgresql://$(MY_DATABASE_SERVICE_HOST):$(MY_DATABASE_SERVICE_PORT)/fruits
         name: swarm-rest-jdbc
         image: swarm-rest-jdbc:latest
         imagePullPolicy: IfNotPresent
