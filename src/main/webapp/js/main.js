@@ -1,9 +1,9 @@
 // The root URL for the RESTful services
-var rootURL = "http://"+window.location.hostname+":"+window.location.port+"/rest/v1";
+var rootURL = "http://"+window.location.hostname+":"+window.location.port+"/api/fruits";
 
 var currentData;
 
-// Retrieve data list when application starts 
+// Retrieve data list when application starts
 findAll();
 
 // Nothing to delete in initial application state
@@ -38,7 +38,7 @@ $('#dataList a').live('click', function() {
 });
 
 function search(searchKey) {
-	if (searchKey == '') 
+	if (searchKey == '')
 		findAll();
 	else
 		findByName(searchKey);
@@ -72,7 +72,7 @@ function findByName(searchKey) {
 		type: 'GET',
 		url: rootURL + '/search/' + searchKey,
 		dataType: "json",
-		success: renderList 
+		success: renderList
 	});
 }
 
@@ -94,11 +94,11 @@ function findById(id) {
 function addData() {
 	console.log('addData');
 	$.ajax({
-		type: 'PUT',
-		contentType: 'text/plain',
+		type: 'POST',
+		contentType: 'application/json',
 		url: rootURL,
 		dataType: "json",
-		data: $('#name').val(),
+		data: formToJSON(),
 		success: function(data, textStatus, jqXHR){
 			alert('Data created successfully');
 			$('#btnDelete').show();
