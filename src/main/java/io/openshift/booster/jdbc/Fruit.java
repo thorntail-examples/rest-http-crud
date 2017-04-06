@@ -1,4 +1,4 @@
-package org.obsidiantoaster.quickstart.jdbc;
+package io.openshift.booster.jdbc;
 
 import java.io.Serializable;
 import java.util.Objects;

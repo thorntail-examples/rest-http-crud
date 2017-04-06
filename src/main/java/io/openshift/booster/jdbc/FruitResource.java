@@ -1,17 +1,11 @@
-package org.obsidiantoaster.quickstart.jdbc;
+package io.openshift.booster.jdbc;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.sql.DataSource;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;

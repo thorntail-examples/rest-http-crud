@@ -1,4 +1,4 @@
-package org.obsidiantoaster.quickstart.jdbc;
+package io.openshift.booster.jdbc;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

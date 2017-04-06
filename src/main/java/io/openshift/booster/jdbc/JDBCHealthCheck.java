@@ -1,9 +1,7 @@
-package org.obsidiantoaster.quickstart.jdbc;
+package io.openshift.booster.jdbc;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
