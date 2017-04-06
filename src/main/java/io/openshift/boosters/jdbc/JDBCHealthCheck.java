@@ -1,4 +1,4 @@
-package io.openshift.booster.jdbc;
+package io.openshift.boosters.jdbc;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

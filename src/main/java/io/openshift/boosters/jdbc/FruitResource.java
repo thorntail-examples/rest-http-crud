@@ -1,4 +1,4 @@
-package io.openshift.booster.jdbc;
+package io.openshift.boosters.jdbc;
 
 import java.util.List;
 

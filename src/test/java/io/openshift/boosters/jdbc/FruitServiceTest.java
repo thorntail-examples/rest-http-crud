@@ -1,4 +1,4 @@
-package org.obsidiantoaster.quickstart.jdbc;
+package io.openshift.boosters.jdbc;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -10,7 +10,6 @@ import javax.ws.rs.core.Response;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import io.openshift.booster.jdbc.Fruit;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;

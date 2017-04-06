@@ -1,4 +1,4 @@
-package org.obsidiantoaster.quickstart.jdbc;
+package io.openshift.boosters.jdbc;
 
 import java.io.File;
 
