@@ -1,4 +1,4 @@
-node("maven") {
+node("launchpad-maven") {
   checkout scm
   stage("Build") {
     sh "mvn clean -DskipTests install"
