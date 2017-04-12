@@ -50,11 +50,11 @@ items:
         containers:
         - env:
           - name: POSTGRESQL_DATABASE
-            value: fruits
+            value: my_data
           - name: POSTGRESQL_PASSWORD
-            value: password
+            value: secret
           - name: POSTGRESQL_USER
-            value: swarm
+            value: luke
           image: openshift/postgresql-92-centos7
           name: my-database
           ports:

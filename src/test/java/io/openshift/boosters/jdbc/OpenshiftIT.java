@@ -30,7 +30,7 @@ public class OpenshiftIT {
     @BeforeClass
     public static void setup() throws Exception {
         // Deploy the database and wait until it's ready.
-        openshift.deploy("database", new File("src/test/resources/database.yml"));
+        openshift.deploy("database", new File("src/test/resources/templates/database.yml"));
         openshift.awaitPodReadinessOrFail(
                 pod -> "my-database".equals(pod.getMetadata().getLabels().get("app"))
         );
