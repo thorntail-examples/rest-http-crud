@@ -31,7 +31,7 @@ public class FruitServiceTest {
      */
     @CreateSwarm
     public static Swarm newContainer() throws Exception {
-        return new Swarm().withProfile("development");
+        return new Swarm().withConfig(FruitServiceTest.class.getClassLoader().getResource("project-defaults.yml"));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class FruitServiceTest {
         Response response = target.request(MediaType.APPLICATION_JSON).get();
         Assert.assertEquals(200, response.getStatus());
         JsonArray values = Json.parse(response.readEntity(String.class)).asArray();
-        Assert.assertTrue(values.size()>0);
+        Assert.assertTrue(values.size() > 0);
     }
 
     @Test

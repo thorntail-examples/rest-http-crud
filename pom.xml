@@ -91,6 +91,7 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>${version.h2}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -141,12 +142,6 @@
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <arguments>
-            <argument>-S</argument>
-            <argument>development</argument>
-          </arguments>
-        </configuration>
       </plugin>
 
       <plugin>
