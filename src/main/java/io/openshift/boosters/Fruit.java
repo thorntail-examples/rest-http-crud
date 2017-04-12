@@ -1,4 +1,4 @@
-package io.openshift.boosters.jdbc;
+package io.openshift.boosters;
 
 import java.io.Serializable;
 import java.util.Objects;

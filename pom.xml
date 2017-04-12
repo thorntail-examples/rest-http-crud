@@ -25,12 +25,12 @@
   </parent>
 
   <groupId>io.openshift.boosters</groupId>
-  <artifactId>swarm-rest-jdbc</artifactId>
+  <artifactId>wfswarm-rest-http-crud</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>JDBC CRUD Examples</name>
-  <description>WildFly Swarm : REST - JDBC</description>
+  <name>Simple CRUD Examples</name>
+  <description>WildFly Swarm : REST - CRUD</description>
 
   <properties>
     <version.wildfly.swarm>2017.4.0</version.wildfly.swarm>
