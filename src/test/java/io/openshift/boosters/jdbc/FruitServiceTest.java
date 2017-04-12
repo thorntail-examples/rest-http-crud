@@ -31,7 +31,7 @@ public class FruitServiceTest {
      */
     @CreateSwarm
     public static Swarm newContainer() throws Exception {
-        return new Swarm().withConfig(FruitServiceTest.class.getClassLoader().getResource("project-defaults.yml"));
+        return new Swarm().withProfile("local");
     }
 
     @Test

@@ -75,22 +75,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>${version.postgresql}</version>
-    </dependency>
-
-    <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-client</artifactId>
       <version>${version.resteasy}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>${version.h2}</version>
       <scope>test</scope>
     </dependency>
 
@@ -135,6 +122,12 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <arguments>
+            <argument>-S</argument>
+            <argument>local</argument>
+          </arguments>
+        </configuration>
       </plugin>
 
       <plugin>
@@ -147,6 +140,20 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>local</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>com.h2database</groupId>
+          <artifactId>h2</artifactId>
+          <version>${version.h2}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+
     <profile>
       <id>openshift</id>
       <build>
@@ -173,8 +180,22 @@
               </generator>
             </configuration>
           </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <skipTests>true</skipTests>
+            </configuration>
+          </plugin>
         </plugins>
       </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.postgresql</groupId>
+          <artifactId>postgresql</artifactId>
+          <version>${version.postgresql}</version>
+        </dependency>
+      </dependencies>
     </profile>
 
     <profile>
