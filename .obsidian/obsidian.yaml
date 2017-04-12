@@ -1,2 +1,0 @@
-name: WildFly Swarm - REST - JDBC
-description:  QuickStart which exposes a Rest endpoint using WildFly Swarm as container and accessing a database using a JDBC driver to populate the response
