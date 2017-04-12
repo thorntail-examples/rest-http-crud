@@ -1,16 +1,21 @@
 package io.openshift.boosters.jdbc;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
+import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.response.Response;
+import io.openshift.booster.test.OpenShiftTestAssistant;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static io.restassured.RestAssured.*;
+import static com.jayway.awaitility.Awaitility.await;
+import static com.jayway.restassured.RestAssured.get;
+import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 
 /**
@@ -20,15 +25,10 @@ import static org.hamcrest.Matchers.containsString;
 @RunAsClient
 public class OpenshiftIT {
 
-    private static final String APPLICATION_NAME = System.getProperty("app.name");
-
-    private static final OpenshiftTestAssistant openshift = new OpenshiftTestAssistant(APPLICATION_NAME);
+    private static final OpenShiftTestAssistant openshift = new OpenShiftTestAssistant();
 
     @BeforeClass
     public static void setup() throws Exception {
-
-        Assert.assertNotNull(APPLICATION_NAME);
-
         // Deploy the database and wait until it's ready.
         openshift.deploy("database", new File("src/test/resources/database.yml"));
         openshift.awaitPodReadinessOrFail(
@@ -37,29 +37,38 @@ public class OpenshiftIT {
 
         System.out.println("Database ready");
 
-
         // the application itself
         openshift.deployApplication();
 
         // wait until the pods & routes become available
         openshift.awaitApplicationReadinessOrFail();
+
+        await().atMost(5, TimeUnit.MINUTES).until(() -> {
+            try {
+                Response response = get();
+                return response.getStatusCode() == 200;
+            } catch (Exception e) {
+                return false;
+            }
+        });
+
+        RestAssured.baseURI = RestAssured.baseURI + "/api/fruits";
     }
 
     @AfterClass
     public static void teardown() throws Exception {
-       openshift.cleanup();
+        openshift.cleanup();
     }
 
     @Test
     public void testServiceInvocation() {
-
-        given().
-            log().all().
-        expect().
-            statusCode(200).
-            body(containsString("Cherry")).
-        when().
-            get(openshift.getBaseUrl()+"/api/fruits/1");
+        given()
+                .pathParam("fruitId", 1)
+        .when()
+                .get("/{fruitId}")
+        .then()
+                .statusCode(200)
+                .body(containsString("Cherry"));
     }
 }
 

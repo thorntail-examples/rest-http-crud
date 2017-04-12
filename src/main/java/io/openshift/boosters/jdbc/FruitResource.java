@@ -28,20 +28,6 @@ public class FruitResource {
     @PersistenceContext(unitName = "MyPU")
     private EntityManager em;
 
-    /*@GET
-        @Path("connection")
-        @Produces("text/plain")
-        public String getConnection() throws NamingException, SQLException {
-            Context ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup("jboss/datasources/MyDS");
-            Connection conn = ds.getConnection();
-            try {
-                return "Using datasource driver: " + conn.getMetaData().getDriverName();
-            } finally {
-                conn.close();
-            }
-        }*/
-
     @GET
     @Produces("application/json")
     @Transactional
