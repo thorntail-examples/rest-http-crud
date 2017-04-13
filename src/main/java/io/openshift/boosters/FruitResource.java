@@ -4,7 +4,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -29,7 +28,6 @@ public class FruitResource {
 
     @GET
     @Produces("application/json")
-    @Transactional
     public Fruit[] get() {
         return em
                 .createNamedQuery("Fruits.findAll", Fruit.class)
@@ -40,7 +38,6 @@ public class FruitResource {
     @GET
     @Path("/{id}")
     @Produces("application/json")
-    @Transactional
     public Fruit getSingle(@PathParam("id") Integer id) {
         return em.find(Fruit.class, id);
     }
@@ -58,8 +55,7 @@ public class FruitResource {
         try {
             em.persist(fruit);
         } catch (Exception e) {
-            e.printStackTrace();
-            return Response.status(500).build();
+            return error(500, e.getMessage());
         }
         return Response.ok(fruit).status(201).build();
     }
@@ -73,11 +69,9 @@ public class FruitResource {
         try {
             Fruit entity = em.find(Fruit.class, id);
             entity.setName(fruit.getName());
-            em.persist(entity);
-            fruit.setId(entity.getId());
+            em.merge(entity);
         } catch (Exception e) {
-            e.printStackTrace();
-            return Response.status(500).build();
+            return error(500, e.getMessage());
         }
         return Response.ok(fruit).status(200).build();
     }
@@ -89,14 +83,10 @@ public class FruitResource {
     @Transactional
     public Response delete(@PathParam("id") Integer id) {
         try {
-
-            Query query = em.createQuery("Select f from Fruit f where f.id=?1");
-            query.setParameter(1, id);
-            Object match = query.getSingleResult();
-            em.remove(match);
+            Fruit entity = em.find(Fruit.class, id);
+            em.remove(entity);
         } catch (Exception e) {
-            e.printStackTrace();
-            return Response.status(500).build();
+            return error(500, e.getMessage());
         }
         return Response.status(204).build();
     }

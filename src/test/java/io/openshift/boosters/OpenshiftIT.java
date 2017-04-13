@@ -1,6 +1,7 @@
 package io.openshift.boosters;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.concurrent.TimeUnit;
@@ -11,6 +12,7 @@ import javax.json.JsonObject;
 import javax.json.JsonValue;
 import javax.json.JsonWriter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.filter.log.LogDetail;
 import com.jayway.restassured.http.ContentType;
@@ -162,34 +164,38 @@ public class OpenshiftIT {
         assertThat(obj.getInt("code")).isNotNull().isEqualTo(422);
     }
 
-//    @Test
-//    public void testUpdate() {
-//        Integer id = createFruit("Pear");
-//
-//        Fruit pear = given()
-//                .pathParam("fruitId", id)
-//                .when()
-//                .get("/{fruitId")
-//                .then()
-//                .assertThat().statusCode(200)
-//                .extract().as(Fruit.class);
-//
-//        pear.setName("Not Pear");
-//
-//        Fruit updatedPear = given()
-//                .pathParam("fruitId", pear.getId())
-//                .body(pear)
-//                .when()
-//                .put("/{fruitId}")
-//                .then()
-//                .assertThat().statusCode(200)
-//                .extract().as(Fruit.class);
-//
-//        assertThat(pear.getId()).isEqualTo(updatedPear.getId());
-//        assertThat(pear.getName()).isNotEqualTo(updatedPear.getName());
-//        assertThat(updatedPear.getName()).isEqualTo("Not Pear");
-//    }
-//
+    @Test
+    public void testUpdate() throws IOException {
+        Integer id = createFruit("Pear");
+
+        String response = given()
+                .pathParam("fruitId", id)
+                .when()
+                .get("/{fruitId}")
+                .then()
+                .assertThat().statusCode(200)
+                .extract().asString();
+
+        Fruit pear = new ObjectMapper().readValue(response, Fruit.class);
+
+        pear.setName("Not Pear");
+
+        response = given()
+                .pathParam("fruitId", pear.getId())
+                .contentType(ContentType.JSON)
+                .body(new ObjectMapper().writeValueAsString(pear))
+                .when()
+                .put("/{fruitId}")
+                .then()
+                .assertThat().statusCode(200)
+                .extract().asString();
+
+        Fruit updatedPear = new ObjectMapper().readValue(response, Fruit.class);
+
+        assertThat(pear.getId()).isEqualTo(updatedPear.getId());
+        assertThat(updatedPear.getName()).isEqualTo("Not Pear");
+    }
+
 //    @Test
 //    public void testUpdateWithUnknownId() {
 //

@@ -31,7 +31,6 @@ public class Fruit implements Serializable {
             allocationSize = 1,
             initialValue = 4)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fruitsSequence")
-
     private Integer id;
 
     @Column(length = 40, unique = true)
