@@ -1,8 +1,7 @@
 package io.openshift.boosters;
 
-import java.util.List;
-
 import javax.enterprise.context.ApplicationScoped;
+import javax.json.Json;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -52,6 +51,10 @@ public class FruitResource {
     @Produces("application/json")
     @Transactional
     public Response create(Fruit fruit) {
+        if (fruit.getId() != null) {
+            return error(422, "Id was invalidly set on request.");
+        }
+
         try {
             em.persist(fruit);
         } catch (Exception e) {
@@ -95,19 +98,17 @@ public class FruitResource {
             e.printStackTrace();
             return Response.status(500).build();
         }
-        return Response.ok().build();
+        return Response.status(204).build();
     }
 
-    // extensions below
-
-    @GET
-    @Path("/search/{token}")
-    @Produces("application/json")
-    @Transactional
-    public List search(@PathParam("token") String token) {
-
-        Query query = em.createQuery("Select f from Fruit f where f.name like ?1");
-        query.setParameter(1, token);
-        return query.getResultList();
+    private Response error(int code, String message) {
+        return Response
+                .status(code)
+                .entity(Json.createObjectBuilder()
+                                .add("error", message)
+                                .add("code", code)
+                                .build()
+                )
+                .build();
     }
 }

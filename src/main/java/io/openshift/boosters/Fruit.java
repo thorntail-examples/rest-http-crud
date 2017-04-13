@@ -32,7 +32,7 @@ public class Fruit implements Serializable {
             initialValue = 4)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fruitsSequence")
 
-    private int id;
+    private Integer id;
 
     @Column(length = 40, unique = true)
     private String name;
@@ -44,11 +44,11 @@ public class Fruit implements Serializable {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -72,7 +72,7 @@ public class Fruit implements Serializable {
         if (!(obj instanceof Fruit))
             return false;
         Fruit that = (Fruit) obj;
-        if (that.name.equals(this.name) && that.id == this.id)
+        if (that.name.equals(this.name) && Objects.equals(that.id, this.id))
             return true;
         else
             return false;
