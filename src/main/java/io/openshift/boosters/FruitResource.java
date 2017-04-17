@@ -66,14 +66,24 @@ public class FruitResource {
     @Produces("application/json")
     @Transactional
     public Response update(@PathParam("id") Integer id, Fruit fruit) {
+        if (fruit.getName() == null) {
+            return error(422, "Fruit Name was not set on request.");
+        }
+
         try {
             Fruit entity = em.find(Fruit.class, id);
+
+            if (entity == null) {
+                return error(404, "Fruit with id of " + id + " does not exist.");
+            }
+
             entity.setName(fruit.getName());
             em.merge(entity);
+
+            return Response.ok(entity).status(200).build();
         } catch (Exception e) {
             return error(500, e.getMessage());
         }
-        return Response.ok(fruit).status(200).build();
     }
 
 

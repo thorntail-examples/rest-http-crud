@@ -1,7 +1,6 @@
 package io.openshift.boosters;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +26,6 @@ import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.restassured.RestAssured.delete;
 import static com.jayway.restassured.RestAssured.get;
 import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.put;
 import static com.jayway.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -93,7 +91,7 @@ public class OpenshiftIT {
     }
 
     @Test
-    public void testWithOneFruit() {
+    public void testWithOneFruit() throws Exception {
         createFruit("Peach");
 
         String payload = get()
@@ -141,8 +139,7 @@ public class OpenshiftIT {
                 .body("")
                 .post()
                 .then()
-                .assertThat().statusCode(415)
-                .extract().asString();
+                .assertThat().statusCode(415);
     }
 
     @Test
@@ -165,18 +162,18 @@ public class OpenshiftIT {
     }
 
     @Test
-    public void testUpdate() throws IOException {
-        Integer id = createFruit("Pear");
+    public void testUpdate() throws Exception {
+        Fruit pear = createFruit("Pear");
 
         String response = given()
-                .pathParam("fruitId", id)
+                .pathParam("fruitId", pear.getId())
                 .when()
                 .get("/{fruitId}")
                 .then()
                 .assertThat().statusCode(200)
                 .extract().asString();
 
-        Fruit pear = new ObjectMapper().readValue(response, Fruit.class);
+        pear = new ObjectMapper().readValue(response, Fruit.class);
 
         pear.setName("Not Pear");
 
@@ -196,26 +193,60 @@ public class OpenshiftIT {
         assertThat(updatedPear.getName()).isEqualTo("Not Pear");
     }
 
-//    @Test
-//    public void testUpdateWithUnknownId() {
-//
-//    }
-//
-//    @Test
-//    public void testUpdateWithInvalidPayload() {
-//
-//    }
-//
-//    @Test
-//    public void testUpdateWithIllegalPayload() {
-//
-//    }
+    @Test
+    public void testUpdateWithUnknownId() throws Exception {
+        Fruit bad = new Fruit("bad");
+        bad.setId(12345678);
+
+        given()
+                .pathParam("fruitId", bad.getId())
+                .contentType(ContentType.JSON)
+                .body(new ObjectMapper().writeValueAsString(bad))
+                .when()
+                .put("/{fruitId}")
+                .then()
+                .assertThat().statusCode(404)
+                .extract().asString();
+    }
 
     @Test
-    public void testDelete() {
-        Integer id = createFruit("Orange");
+    public void testUpdateInvalidPayload() {
+        given()
+                .contentType(ContentType.TEXT)
+                .body("")
+                .post()
+                .then()
+                .assertThat().statusCode(415);
+    }
 
-        delete("/" + id)
+    @Test
+    public void testUpdateIllegalPayload() throws Exception {
+        Fruit carrot = createFruit("Carrot");
+        System.out.println(carrot.getId());
+        carrot.setName(null);
+
+        String payload = given()
+                .pathParam("fruitId", carrot.getId())
+                .contentType(ContentType.JSON)
+                .body(new ObjectMapper().writeValueAsString(carrot))
+                .when()
+                .put("/{fruitId}")
+                .then()
+                .assertThat().statusCode(422)
+                .extract().asString();
+
+        JsonObject obj = Json.createReader(new StringReader(payload)).readObject();
+        assertThat(obj).isNotNull();
+        assertThat(obj.getString("error")).isNotNull();
+        System.out.println(obj.getString("error"));
+        assertThat(obj.getInt("code")).isNotNull().isEqualTo(422);
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        Fruit orange = createFruit("Orange");
+
+        delete("/" + orange.getId())
                 .then()
                 .assertThat().statusCode(204);
 
@@ -237,7 +268,7 @@ public class OpenshiftIT {
                 .body(is("[]"));
     }
 
-    private Integer createFruit(String name) {
+    private Fruit createFruit(String name) throws Exception {
         String payload = given()
                 .contentType(ContentType.JSON)
                 .body(convert(Json.createObjectBuilder().add("name", name).build()))
@@ -250,7 +281,7 @@ public class OpenshiftIT {
         assertThat(obj).isNotNull();
         assertThat(obj.getInt("id")).isNotNull().isGreaterThan(0);
 
-        return obj.getInt("id");
+        return new ObjectMapper().readValue(payload, Fruit.class);
     }
 
     private String convert(JsonObject object) {
