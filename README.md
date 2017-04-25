@@ -1,1 +1,1 @@
-http://openshiftio-appdev-docs-appdev-documentation.tsrv.devshift.net/mission-crud-wf-swarm.html
+http://appdev.openshift.io/mission-crud-wf-swarm.html
