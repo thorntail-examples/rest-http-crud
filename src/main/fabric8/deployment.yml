@@ -28,3 +28,6 @@ spec:
             httpGet:
               path: /
               port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 30
