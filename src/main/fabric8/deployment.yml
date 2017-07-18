@@ -19,15 +19,3 @@ spec:
                    key: password
             - name: JAVA_OPTIONS
               value: "-Dswarm.datasources.data-sources.MyDS.connection-url=jdbc:postgresql://$(MY_DATABASE_SERVICE_HOST):$(MY_DATABASE_SERVICE_PORT)/my_data -Dswarm.datasources.data-sources.MyDS.user-name=$(DB_USERNAME) -Dswarm.datasources.data-sources.MyDS.password=$(DB_PASSWORD) -Dswarm.datasources.data-sources.MyDS.driver-name=postgresql"
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 8080
-              scheme: HTTP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 60
-            periodSeconds: 30
