@@ -20,7 +20,7 @@
   <parent>
     <groupId>io.openshift</groupId>
     <artifactId>booster-parent</artifactId>
-    <version>5</version>
+    <version>8</version>
   </parent>
 
   <groupId>io.openshift.boosters</groupId>
@@ -32,7 +32,7 @@
   <description>WildFly Swarm : REST - CRUD</description>
 
   <properties>
-    <version.wildfly.swarm>2017.7.0</version.wildfly.swarm>
+    <version.wildfly.swarm>2017.8.1</version.wildfly.swarm>
     <version.h2>1.4.187</version.h2>
     <version.resteasy>3.0.19.Final</version.resteasy>
     <version.postgresql>9.4.1207</version.postgresql>
@@ -171,9 +171,6 @@
                 </excludes>
               </generator>
               <enricher>
-                <includes>
-                  <include>wildfly-swarm-health-check</include>
-                </includes>
                 <config>
                   <wildfly-swarm-health-check>
                     <path>/</path>
