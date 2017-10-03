@@ -16,9 +16,9 @@
 
 package io.openshift.boosters;
 
-import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import javax.json.Json;
@@ -31,12 +31,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.filter.log.LogDetail;
 import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.response.Response;
-import io.openshift.booster.test.OpenShiftTestAssistant;
-import org.junit.AfterClass;
+import org.arquillian.cube.openshift.impl.enricher.RouteURL;
+import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.restassured.RestAssured.delete;
@@ -50,45 +49,24 @@ import static org.hamcrest.Matchers.is;
 /**
  * @author Heiko Braun
  */
+@RunWith(Arquillian.class)
 public class OpenshiftIT {
 
-    private static final OpenShiftTestAssistant openshift = new OpenShiftTestAssistant();
+    @RouteURL("wfswarm-rest-http-crud")
+    private URL url;
 
-    @BeforeClass
-    public static void setup() throws Exception {
-        // Deploy the database and wait until it's ready.
-        openshift.deploy("database", new File("src/test/resources/templates/database.yml"));
-        openshift.awaitPodReadinessOrFail(
-                pod -> "my-database".equals(pod.getMetadata().getLabels().get("app"))
-        );
-
-        System.out.println("Database ready");
-
-        // the application itself
-        openshift.deployApplication();
-
-        // wait until the pods & routes become available
-        openshift.awaitApplicationReadinessOrFail();
-
+    @Before
+    public void setup() throws Exception {
         await().atMost(5, TimeUnit.MINUTES).until(() -> {
             try {
-                Response response = get();
-                return response.getStatusCode() == 200;
+                return get(url).getStatusCode() == 200;
             } catch (Exception e) {
                 return false;
             }
         });
 
-        RestAssured.baseURI = RestAssured.baseURI + "/api/fruits";
-    }
+        RestAssured.baseURI = url + "api/fruits";
 
-    @AfterClass
-    public static void teardown() throws Exception {
-        openshift.cleanup();
-    }
-
-    @Before
-    public void removeAllData() {
         String jsonData = when()
                 .get()
                 .then()
