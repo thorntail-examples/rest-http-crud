@@ -25,7 +25,7 @@
 
   <groupId>io.openshift.boosters</groupId>
   <artifactId>wfswarm-rest-http-crud</artifactId>
-  <version>5-SNAPSHOT</version>
+  <version>6-SNAPSHOT</version>
   <packaging>war</packaging>
 
   <name>WildFly Swarm Booster - Relational Database Backend Mission</name>
