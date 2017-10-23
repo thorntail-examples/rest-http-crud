@@ -35,15 +35,7 @@
     <version.resteasy>3.0.19.Final</version.resteasy>
     <version.arquillian.cube>1.9.1</version.arquillian.cube>
     <version.h2>1.4.187</version.h2>
-    <version.postgresql>9.4.1207</version.postgresql>
-    <!-- Licenses - plugins -->
-    <version.wildfly.swarm.fraction.plugin>61</version.wildfly.swarm.fraction.plugin>
-    <version.xml-maven-plugin>1.0.1</version.xml-maven-plugin>
-    <version.license-maven-plugin>1.13</version.license-maven-plugin>
-    <version.wildfly-licenses-plugin>1.0.1</version.wildfly-licenses-plugin>
-    <!-- Licenses - JBoss repo URL used in custom-settings -->
-    <jboss.repo.url>https://repository.jboss.org/nexus/content/groups/public</jboss.repo.url>
-    <licenses.pom.file>pom.xml</licenses.pom.file>
+    <version.postgresql>9.4.1207</version.postgresql>    
     <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
 
