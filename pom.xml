@@ -31,12 +31,12 @@
   <name>WildFly Swarm Booster - Relational Database Backend Mission</name>
 
   <properties>
-    <version.wildfly.swarm>7.0.0.redhat-6</version.wildfly.swarm>
+    <version.wildfly.swarm>7.0.0.redhat-8</version.wildfly.swarm>
     <version.resteasy>3.0.19.Final</version.resteasy>
     <version.arquillian.cube>1.9.1</version.arquillian.cube>
     <version.override.jackson>2.7.7</version.override.jackson>
     <version.h2>1.4.187</version.h2>
-    <version.postgresql>9.4.1207</version.postgresql>    
+    <version.postgresql>9.4.1207</version.postgresql>
     <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
 
@@ -95,6 +95,13 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+       <groupId>commons-logging</groupId>
+       <artifactId>commons-logging</artifactId>
+       <version>1.1.1</version>
+       <scope>test</scope>
+    </dependency>
+   
     <dependency>
       <groupId>org.wildfly.swarm</groupId>
       <artifactId>arquillian</artifactId>
