@@ -18,8 +18,6 @@ package io.openshift.boosters;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -31,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
+import org.arquillian.cube.openshift.impl.enricher.AwaitRoute;
 import org.arquillian.cube.openshift.impl.enricher.RouteURL;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Before;
@@ -52,20 +51,13 @@ import static org.hamcrest.Matchers.is;
 @RunWith(Arquillian.class)
 public class OpenshiftIT {
 
-    @RouteURL("${app.name}")
-    private URL url;
+    @RouteURL(value = "${app.name}", path = "/api/fruits")
+    @AwaitRoute(path = "/")
+    private String url;
 
     @Before
     public void setup() throws Exception {
-        await().atMost(5, TimeUnit.MINUTES).until(() -> {
-            try {
-                return get(url).getStatusCode() == 200;
-            } catch (Exception e) {
-                return false;
-            }
-        });
-
-        RestAssured.baseURI = url + "api/fruits";
+        RestAssured.baseURI = url;
 
         String jsonData = when()
                 .get()
