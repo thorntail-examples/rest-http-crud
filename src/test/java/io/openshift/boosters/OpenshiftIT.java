@@ -226,14 +226,14 @@ public class OpenshiftIT {
                 .when()
                 .put("/{fruitId}")
                 .then()
-                .assertThat().statusCode(400)
+                .assertThat().statusCode(422)
                 .extract().asString();
 
         JsonObject obj = Json.createReader(new StringReader(payload)).readObject();
         assertThat(obj).isNotNull();
         assertThat(obj.getString("error")).isNotNull();
         System.out.println(obj.getString("error"));
-        assertThat(obj.getInt("code")).isNotNull().isEqualTo(400);
+        assertThat(obj.getInt("code")).isNotNull().isEqualTo(422);
     }
 
     @Test
