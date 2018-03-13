@@ -65,7 +65,7 @@ public class FruitResource {
     @Transactional
     public Response create(Fruit fruit) {
         
-        if (fruit == null || fruit.getName() == null || fruit.getName().length() == 0) {
+        if (fruit == null || fruit.getName() == null || fruit.getName().trim().length() == 0) {
             return error(400, "The name is required!");
         }
 
@@ -88,7 +88,7 @@ public class FruitResource {
     @Transactional
     public Response update(@PathParam("id") Integer id, Fruit fruit) {
         
-        if (fruit == null || fruit.getName() == null || fruit.getName().length() == 0) {
+        if (fruit == null || fruit.getName() == null || fruit.getName().trim().length() == 0) {
             return error(400, "The name is required!");
         }
 
