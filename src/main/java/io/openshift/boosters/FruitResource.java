@@ -66,7 +66,7 @@ public class FruitResource {
     public Response create(Fruit fruit) {
         
         if (fruit == null || fruit.getName() == null || fruit.getName().trim().length() == 0) {
-            return error(400, "The name is required!");
+            return error(422, "The name is required!");
         }
 
         if (fruit.getId() != null) {
@@ -89,7 +89,7 @@ public class FruitResource {
     public Response update(@PathParam("id") Integer id, Fruit fruit) {
         
         if (fruit == null || fruit.getName() == null || fruit.getName().trim().length() == 0) {
-            return error(400, "The name is required!");
+            return error(422, "The name is required!");
         }
 
         try {
