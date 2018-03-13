@@ -64,8 +64,11 @@ public class FruitResource {
     @Produces("application/json")
     @Transactional
     public Response create(Fruit fruit) {
-        
-        if (fruit == null || fruit.getName() == null || fruit.getName().trim().length() == 0) {
+        if (fruit == null){
+            return error(415, "Invalid payload!");
+        }
+
+        if (fruit.getName() == null || fruit.getName().trim().length() == 0) {
             return error(422, "The name is required!");
         }
 
@@ -87,8 +90,11 @@ public class FruitResource {
     @Produces("application/json")
     @Transactional
     public Response update(@PathParam("id") Integer id, Fruit fruit) {
-        
-        if (fruit == null || fruit.getName() == null || fruit.getName().trim().length() == 0) {
+        if (fruit == null){
+            return error(415, "Invalid payload!");
+        }
+
+        if (fruit.getName() == null || fruit.getName().trim().length() == 0) {
             return error(422, "The name is required!");
         }
 
