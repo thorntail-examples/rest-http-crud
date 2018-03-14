@@ -1,7 +1,0 @@
-name: HTTP CRUD - Wildfly Swarm
-description: A simple CRUD applicaiton using Wildfly Swarm
-versions:
-  - id: community
-    name: 2017.10.0 (Community)
-  - id: redhat
-    name: 7.0.0.redhat-8 (RHOAR)

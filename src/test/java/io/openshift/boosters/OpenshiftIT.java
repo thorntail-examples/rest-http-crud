@@ -18,8 +18,6 @@ package io.openshift.boosters;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -28,21 +26,22 @@ import javax.json.JsonValue;
 import javax.json.JsonWriter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.filter.log.LogDetail;
-import com.jayway.restassured.http.ContentType;
+import io.restassured.RestAssured;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.http.ContentType;
+import org.arquillian.cube.openshift.impl.enricher.AwaitRoute;
 import org.arquillian.cube.openshift.impl.enricher.RouteURL;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.jayway.awaitility.Awaitility.await;
-import static com.jayway.restassured.RestAssured.delete;
-import static com.jayway.restassured.RestAssured.get;
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
+import static io.restassured.RestAssured.delete;
+import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
@@ -52,20 +51,13 @@ import static org.hamcrest.Matchers.is;
 @RunWith(Arquillian.class)
 public class OpenshiftIT {
 
-    @RouteURL("${app.name}")
-    private URL url;
+    @RouteURL(value = "${app.name}", path = "/api/fruits")
+    @AwaitRoute(path = "/")
+    private String url;
 
     @Before
     public void setup() throws Exception {
-        await().atMost(5, TimeUnit.MINUTES).until(() -> {
-            try {
-                return get(url).getStatusCode() == 200;
-            } catch (Exception e) {
-                return false;
-            }
-        });
-
-        RestAssured.baseURI = url + "api/fruits";
+        RestAssured.baseURI = url;
 
         String jsonData = when()
                 .get()
