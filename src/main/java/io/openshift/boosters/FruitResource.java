@@ -64,6 +64,14 @@ public class FruitResource {
     @Produces("application/json")
     @Transactional
     public Response create(Fruit fruit) {
+        if (fruit == null){
+            return error(415, "Invalid payload!");
+        }
+
+        if (fruit.getName() == null || fruit.getName().trim().length() == 0) {
+            return error(422, "The name is required!");
+        }
+
         if (fruit.getId() != null) {
             return error(422, "Id was invalidly set on request.");
         }
@@ -82,8 +90,12 @@ public class FruitResource {
     @Produces("application/json")
     @Transactional
     public Response update(@PathParam("id") Integer id, Fruit fruit) {
-        if (fruit.getName() == null) {
-            return error(422, "Fruit Name was not set on request.");
+        if (fruit == null){
+            return error(415, "Invalid payload!");
+        }
+
+        if (fruit.getName() == null || fruit.getName().trim().length() == 0) {
+            return error(422, "The name is required!");
         }
 
         try {
@@ -121,9 +133,9 @@ public class FruitResource {
         return Response
                 .status(code)
                 .entity(Json.createObjectBuilder()
-                                .add("error", message)
-                                .add("code", code)
-                                .build()
+                            .add("error", message)
+                            .add("code", code)
+                            .build()
                 )
                 .build();
     }
