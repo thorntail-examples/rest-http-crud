@@ -64,7 +64,7 @@ public class FruitResource {
     @Produces("application/json")
     @Transactional
     public Response create(Fruit fruit) {
-        if (fruit == null){
+        if (fruit == null) {
             return error(415, "Invalid payload!");
         }
 
@@ -90,7 +90,7 @@ public class FruitResource {
     @Produces("application/json")
     @Transactional
     public Response update(@PathParam("id") Integer id, Fruit fruit) {
-        if (fruit == null){
+        if (fruit == null) {
             return error(415, "Invalid payload!");
         }
 
