@@ -141,7 +141,7 @@ objects:
                 key: password
                 name: my-database-secret
           - name: GC_MAX_METASPACE_SIZE
-              value: "150"
+            value: "150"
           - name: JAVA_OPTIONS
             value: -Dswarm.datasources.data-sources.MyDS.connection-url=jdbc:postgresql://$(MY_DATABASE_SERVICE_HOST):$(MY_DATABASE_SERVICE_PORT)/my_data
               -Dswarm.datasources.data-sources.MyDS.user-name=$(DB_USERNAME) -Dswarm.datasources.data-sources.MyDS.password=$(DB_PASSWORD)
