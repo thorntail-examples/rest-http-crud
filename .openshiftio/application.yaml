@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: wfswarm-rest-http-crud
+  name: thorntail-rest-http-crud
 parameters:
 - name: SOURCE_REPOSITORY_URL
   description: The source URL for the application
@@ -28,7 +28,7 @@ objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    name: wfswarm-rest-http-crud
+    name: thorntail-rest-http-crud
   spec: {}
 - apiVersion: v1
   kind: ImageStream
@@ -43,12 +43,12 @@ objects:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    name: wfswarm-rest-http-crud
+    name: thorntail-rest-http-crud
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: wfswarm-rest-http-crud:latest
+        name: thorntail-rest-http-crud:latest
     postCommit: {}
     resources: {}
     source:
@@ -82,7 +82,7 @@ objects:
   kind: Secret
   metadata:
     labels:
-      app: wfswarm-rest-http-crud
+      app: thorntail-rest-http-crud
       group: io.openshift.boosters
     name: my-database-secret
   stringData:
@@ -93,9 +93,9 @@ objects:
   metadata:
     labels:
       expose: "true"
-      app: wfswarm-rest-http-crud
+      app: thorntail-rest-http-crud
       group: io.openshift.boosters
-    name: wfswarm-rest-http-crud
+    name: thorntail-rest-http-crud
   spec:
     ports:
     - name: http
@@ -103,20 +103,20 @@ objects:
       protocol: TCP
       targetPort: 8080
     selector:
-      app: wfswarm-rest-http-crud
+      app: thorntail-rest-http-crud
       group: io.openshift.boosters
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
     labels:
-      app: wfswarm-rest-http-crud
+      app: thorntail-rest-http-crud
       group: io.openshift.boosters
-    name: wfswarm-rest-http-crud
+    name: thorntail-rest-http-crud
   spec:
     replicas: 1
     revisionHistoryLimit: 2
     selector:
-      app: wfswarm-rest-http-crud
+      app: thorntail-rest-http-crud
       group: io.openshift.boosters
     strategy:
       rollingParams:
@@ -125,7 +125,7 @@ objects:
     template:
       metadata:
         labels:
-          app: wfswarm-rest-http-crud
+          app: thorntail-rest-http-crud
           group: io.openshift.boosters
       spec:
         containers:
@@ -150,7 +150,7 @@ objects:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-          image: wfswarm-rest-http-crud:latest
+          image: thorntail-rest-http-crud:latest
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -158,7 +158,7 @@ objects:
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 180
-          name: wildfly-swarm
+          name: thorntail
           ports:
           - containerPort: 8080
             name: http
@@ -182,21 +182,21 @@ objects:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - wildfly-swarm
+        - thorntail
         from:
           kind: ImageStreamTag
-          name: wfswarm-rest-http-crud:latest
+          name: thorntail-rest-http-crud:latest
       type: ImageChange
 - apiVersion: v1
   kind: Route
   metadata:
     labels:
-      app: wfswarm-rest-http-crud      
+      app: thorntail-rest-http-crud
       group: io.openshift.boosters
-    name: wfswarm-rest-http-crud
+    name: thorntail-rest-http-crud
   spec:
     port:
       targetPort: 8080
     to:
       kind: Service
-      name: wfswarm-rest-http-crud
+      name: thorntail-rest-http-crud
