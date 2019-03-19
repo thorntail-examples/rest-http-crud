@@ -6,7 +6,7 @@ parameters:
 - name: SOURCE_REPOSITORY_URL
   description: The source URL for the application
   displayName: Source URL
-  value: https://github.com/wildfly-swarm-openshiftio-boosters/wfswarm-rest-http-crud.git
+  value: https://github.com/thorntail-examples/rest-http-crud.git
   required: true
 - name: SOURCE_REPOSITORY_REF
   description: The branch name for the application
