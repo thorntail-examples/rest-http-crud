@@ -13,21 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-package io.openshift.boosters;
-
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonValue;
-import javax.json.JsonWriter;
+package io.thorntail.example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import org.arquillian.cube.openshift.impl.enricher.AwaitRoute;
 import org.arquillian.cube.openshift.impl.enricher.RouteURL;
@@ -36,54 +24,70 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonValue;
+import javax.json.JsonWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+
 import static io.restassured.RestAssured.delete;
-import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
-/**
- * @author Heiko Braun
- */
 @RunWith(Arquillian.class)
 public class OpenshiftIT {
-
     @RouteURL(value = "${app.name}", path = "/api/fruits")
     @AwaitRoute(path = "/")
     private String url;
 
     @Before
-    public void setup() throws Exception {
-        RestAssured.baseURI = url;
-
-        String jsonData = when()
-                .get()
+    public void setup() {
+        String jsonData =
+                given()
+                        .baseUri(url)
+                .when()
+                        .get()
                 .then()
-                .extract().asString();
+                        .extract().asString();
 
         JsonArray array = Json.createReader(new StringReader(jsonData)).readArray();
-        array.forEach(val -> delete("/" + ((JsonObject) val).getInt("id")));
+        array.forEach(val -> {
+            given()
+                    .baseUri(url)
+            .when()
+                    .delete("/" + ((JsonObject) val).getInt("id"))
+            .then()
+                    .statusCode(204);
+        });
     }
 
     @Test
-    public void testRetrieveNoFruit() {
-        get()
-                .then()
-                .assertThat().statusCode(200)
+    public void retrieveNoFruit() {
+        given()
+                .baseUri(url)
+        .when()
+                .get()
+        .then()
+                .statusCode(200)
                 .body(is("[]"));
     }
 
     @Test
-    public void testWithOneFruit() throws Exception {
+    public void oneFruit() throws Exception {
         createFruit("Peach");
 
-        String payload = get()
+        String payload =
+                given()
+                        .baseUri(url)
+                .when()
+                        .get()
                 .then()
-                .assertThat().statusCode(200)
-                .extract().asString();
+                        .statusCode(200)
+                        .extract().asString();
 
         JsonArray array = Json.createReader(new StringReader(payload)).readArray();
 
@@ -94,23 +98,27 @@ public class OpenshiftIT {
         assertThat(obj.getInt("id")).isNotNull().isGreaterThan(0);
 
         given()
+                .baseUri(url)
+        .when()
                 .pathParam("fruitId", obj.getInt("id"))
-                .when()
                 .get("/{fruitId}")
-                .then()
-                .assertThat().statusCode(200)
+        .then()
+                .statusCode(200)
                 .body(containsString("Peach"));
     }
 
     @Test
-    public void testCreateFruit() {
-        String payload = given()
-                .contentType(ContentType.JSON)
-                .body(convert(Json.createObjectBuilder().add("name", "Raspberry").build()))
-                .post()
+    public void createFruit() {
+        String payload =
+                given()
+                        .baseUri(url)
+                .when()
+                        .contentType(ContentType.JSON)
+                        .body(convert(Json.createObjectBuilder().add("name", "Raspberry").build()))
+                        .post()
                 .then()
-                .assertThat().statusCode(201)
-                .extract().asString();
+                        .statusCode(201)
+                        .extract().asString();
 
         JsonObject obj = Json.createReader(new StringReader(payload)).readObject();
         assertThat(obj).isNotNull();
@@ -119,27 +127,32 @@ public class OpenshiftIT {
     }
 
     @Test
-    public void testCreateInvalidPayload() {
+    public void createInvalidPayload() {
         given()
+                .baseUri(url)
+        .when()
                 .contentType(ContentType.TEXT)
                 .body("")
                 .post()
-                .then()
-                .assertThat().statusCode(415);
+        .then()
+                .statusCode(415);
     }
 
     @Test
-    public void testCreateIllegalPayload() {
+    public void createIllegalPayload() {
         Fruit badFruit = new Fruit("Carrot");
         badFruit.setId(2);
 
-        String payload = given()
-                .contentType(ContentType.JSON)
-                .body(badFruit)
-                .post()
+        String payload =
+                given()
+                        .baseUri(url)
+                .when()
+                        .contentType(ContentType.JSON)
+                        .body(badFruit)
+                        .post()
                 .then()
-                .assertThat().statusCode(422)
-                .extract().asString();
+                        .statusCode(422)
+                        .extract().asString();
 
         JsonObject obj = Json.createReader(new StringReader(payload)).readObject();
         assertThat(obj).isNotNull();
@@ -148,30 +161,34 @@ public class OpenshiftIT {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void update() throws Exception {
         Fruit pear = createFruit("Pear");
 
-        String response = given()
-                .pathParam("fruitId", pear.getId())
+        String response =
+                given()
+                        .baseUri(url)
                 .when()
-                .get("/{fruitId}")
+                        .pathParam("fruitId", pear.getId())
+                        .get("/{fruitId}")
                 .then()
-                .assertThat().statusCode(200)
-                .extract().asString();
+                        .statusCode(200)
+                        .extract().asString();
 
         pear = new ObjectMapper().readValue(response, Fruit.class);
 
         pear.setName("Not Pear");
 
-        response = given()
-                .pathParam("fruitId", pear.getId())
-                .contentType(ContentType.JSON)
-                .body(new ObjectMapper().writeValueAsString(pear))
+        response =
+                given()
+                        .baseUri(url)
                 .when()
-                .put("/{fruitId}")
+                        .pathParam("fruitId", pear.getId())
+                        .contentType(ContentType.JSON)
+                        .body(new ObjectMapper().writeValueAsString(pear))
+                        .put("/{fruitId}")
                 .then()
-                .assertThat().statusCode(200)
-                .extract().asString();
+                        .statusCode(200)
+                        .extract().asString();
 
         Fruit updatedPear = new ObjectMapper().readValue(response, Fruit.class);
 
@@ -180,51 +197,54 @@ public class OpenshiftIT {
     }
 
     @Test
-    public void testUpdateWithUnknownId() throws Exception {
+    public void updateWithUnknownId() throws Exception {
         Fruit bad = new Fruit("bad");
         bad.setId(12345678);
 
         given()
+                .baseUri(url)
+        .when()
                 .pathParam("fruitId", bad.getId())
                 .contentType(ContentType.JSON)
                 .body(new ObjectMapper().writeValueAsString(bad))
-                .when()
                 .put("/{fruitId}")
-                .then()
-                .assertThat().statusCode(404)
+        .then()
+                .statusCode(404)
                 .extract().asString();
     }
 
     @Test
-    public void testUpdateInvalidPayload() {
+    public void updateInvalidPayload() {
         given()
+                .baseUri(url)
+        .when()
                 .contentType(ContentType.TEXT)
                 .body("")
                 .post()
-                .then()
-                .assertThat().statusCode(415);
+        .then()
+                .statusCode(415);
     }
 
     @Test
-    public void testUpdateIllegalPayload() throws Exception {
+    public void updateIllegalPayload() throws Exception {
         Fruit carrot = createFruit("Carrot");
-        System.out.println(carrot.getId());
         carrot.setName(null);
 
-        String payload = given()
-                .pathParam("fruitId", carrot.getId())
-                .contentType(ContentType.JSON)
-                .body(new ObjectMapper().writeValueAsString(carrot))
+        String payload =
+                given()
+                        .baseUri(url)
                 .when()
-                .put("/{fruitId}")
+                        .pathParam("fruitId", carrot.getId())
+                        .contentType(ContentType.JSON)
+                        .body(new ObjectMapper().writeValueAsString(carrot))
+                        .put("/{fruitId}")
                 .then()
-                .assertThat().statusCode(422)
-                .extract().asString();
+                        .statusCode(422)
+                        .extract().asString();
 
         JsonObject obj = Json.createReader(new StringReader(payload)).readObject();
         assertThat(obj).isNotNull();
         assertThat(obj.getString("error")).isNotNull();
-        System.out.println(obj.getString("error"));
         assertThat(obj.getInt("code")).isNotNull().isEqualTo(422);
     }
 
@@ -232,36 +252,51 @@ public class OpenshiftIT {
     public void testDelete() throws Exception {
         Fruit orange = createFruit("Orange");
 
-        delete("/" + orange.getId())
-                .then()
-                .assertThat().statusCode(204);
+        given()
+                .baseUri(url)
+        .when()
+                .delete("/" + orange.getId())
+        .then()
+                .statusCode(204);
 
-        get()
-                .then()
-                .assertThat().statusCode(200)
+        given()
+                .baseUri(url)
+        .when()
+                .get()
+        .then()
+                .statusCode(200)
                 .body(is("[]"));
     }
 
     @Test
-    public void testDeleteWithUnknownId() {
-        delete("/unknown")
-                .then()
-                .assertThat().statusCode(404);
+    public void deleteWithUnknownId() {
+        given()
+                .baseUri(url)
+        .when()
+                .delete("/unknown")
+        .then()
+                .statusCode(404);
 
-        get()
-                .then()
-                .assertThat().statusCode(200)
+        given()
+                .baseUri(url)
+        .when()
+                .get()
+        .then()
+                .statusCode(200)
                 .body(is("[]"));
     }
 
     private Fruit createFruit(String name) throws Exception {
-        String payload = given()
-                .contentType(ContentType.JSON)
-                .body(convert(Json.createObjectBuilder().add("name", name).build()))
-                .post()
-                .then().log().ifValidationFails(LogDetail.ALL)
-                .assertThat().statusCode(201)
-                .extract().asString();
+        String payload =
+                given()
+                        .baseUri(url)
+                .when()
+                        .contentType(ContentType.JSON)
+                        .body(convert(Json.createObjectBuilder().add("name", name).build()))
+                        .post()
+                .then()
+                        .statusCode(201)
+                        .extract().asString();
 
         JsonObject obj = Json.createReader(new StringReader(payload)).readObject();
         assertThat(obj).isNotNull();
@@ -271,12 +306,10 @@ public class OpenshiftIT {
     }
 
     private String convert(JsonObject object) {
-        StringWriter stWriter = new StringWriter();
-        JsonWriter jsonWriter = Json.createWriter(stWriter);
+        StringWriter stringWriter = new StringWriter();
+        JsonWriter jsonWriter = Json.createWriter(stringWriter);
         jsonWriter.writeObject(object);
         jsonWriter.close();
-
-        return stWriter.toString();
+        return stringWriter.toString();
     }
 }
-

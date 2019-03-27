@@ -13,8 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-package io.openshift.boosters;
+package io.thorntail.example;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
@@ -29,39 +28,33 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-/**
- * @author Heiko Braun
- * @since 17/01/2017
- */
 @Path("/fruits")
 @ApplicationScoped
 public class FruitResource {
-
     @PersistenceContext(unitName = "MyPU")
     private EntityManager em;
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Fruit[] get() {
-        return em
-                .createNamedQuery("Fruits.findAll", Fruit.class)
+        return em.createNamedQuery("Fruits.findAll", Fruit.class)
                 .getResultList()
                 .toArray(new Fruit[0]);
     }
 
     @GET
     @Path("/{id}")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Fruit getSingle(@PathParam("id") Integer id) {
         return em.find(Fruit.class, id);
     }
 
-
     @POST
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response create(Fruit fruit) {
         if (fruit == null) {
@@ -86,8 +79,8 @@ public class FruitResource {
 
     @PUT
     @Path("/{id}")
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response update(@PathParam("id") Integer id, Fruit fruit) {
         if (fruit == null) {
@@ -117,7 +110,7 @@ public class FruitResource {
 
     @DELETE
     @Path("/{id}")
-    @Consumes("text/plain")
+    @Consumes(MediaType.TEXT_PLAIN)
     @Transactional
     public Response delete(@PathParam("id") Integer id) {
         try {

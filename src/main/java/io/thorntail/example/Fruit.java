@@ -13,11 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-package io.openshift.boosters;
-
-import java.io.Serializable;
-import java.util.Objects;
+package io.thorntail.example;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,10 +24,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Objects;
 
-/**
- * @author Heiko Braun
- */
 @Entity
 @Table(name = "known_fruits")
 @NamedQueries({
@@ -41,12 +36,8 @@ public class Fruit implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @SequenceGenerator(
-            name = "fruitsSequence",
-            sequenceName = "known_fruits_id_seq",
-            allocationSize = 1,
-            initialValue = 4)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fruitsSequence")
+    @SequenceGenerator(name = "fruitsSequence", sequenceName = "known_fruits_id_seq", allocationSize = 1, initialValue = 4)
     private Integer id;
 
     @Column(length = 40, unique = true)
@@ -81,21 +72,16 @@ public class Fruit implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (null == obj)
-            return false;
-        if (!(obj instanceof Fruit))
-            return false;
-        Fruit that = (Fruit) obj;
-        if (that.name.equals(this.name) && Objects.equals(that.id, this.id))
-            return true;
-        else
-            return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Fruit)) return false;
+        Fruit fruit = (Fruit) o;
+        return Objects.equals(id, fruit.id) &&
+                Objects.equals(name, fruit.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.name);
+        return Objects.hash(id, name);
     }
-
 }

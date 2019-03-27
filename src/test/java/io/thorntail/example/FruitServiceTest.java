@@ -13,8 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-package io.openshift.boosters;
+package io.thorntail.example;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -28,35 +27,33 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.wildfly.swarm.arquillian.DefaultDeployment;
 
-/**
- * @author Heiko Braun
- */
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(Arquillian.class)
 @DefaultDeployment
 public class FruitServiceTest {
-
     @Test
     @RunAsClient
-    public void test_list_fruits() {
+    public void listFruits() {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://localhost:8080")
                 .path("/api")
                 .path("/fruits");
 
         Response response = target.request(MediaType.APPLICATION_JSON).get();
-        Assert.assertEquals(200, response.getStatus());
+        assertEquals(200, response.getStatus());
         JsonArray values = Json.parse(response.readEntity(String.class)).asArray();
-        Assert.assertTrue(values.size() > 0);
+        assertTrue(values.size() > 0);
     }
 
     @Test
     @RunAsClient
-    public void test_fruit_by_id() {
+    public void fruitById() {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://localhost:8080")
                 .path("/api")
@@ -64,14 +61,14 @@ public class FruitServiceTest {
                 .path("/1"); // fruit by ID
 
         Response response = target.request(MediaType.APPLICATION_JSON).get();
-        Assert.assertEquals(200, response.getStatus());
+        assertEquals(200, response.getStatus());
         JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
-        Assert.assertTrue(value.get("name").asString().equals("Cherry"));
+        assertEquals("Cherry", value.get("name").asString());
     }
 
     @Test
     @RunAsClient
-    public void test_create_fruit() {
+    public void createFruit() {
         createNewFruit("Pineapple");
     }
 
@@ -86,19 +83,17 @@ public class FruitServiceTest {
                         new Fruit(name),
                         MediaType.APPLICATION_JSON)
                 );
-        Assert.assertEquals(201, response.getStatus());
+        assertEquals(201, response.getStatus());
         JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
-        Assert.assertTrue(value.get("name").asString().equals(name));
+        assertEquals(name, value.get("name").asString());
         return value;
     }
 
-
     @Test
     @RunAsClient
-    public void test_modify_fruit() {
-
+    public void modifyFruit() {
         JsonObject lemon = createNewFruit("Lemon");
-        Integer id = lemon.get("id").asInt();
+        int id = lemon.get("id").asInt();
 
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://localhost:8080")
@@ -111,11 +106,9 @@ public class FruitServiceTest {
                         new Fruit("Apricot"),
                         MediaType.APPLICATION_JSON)
                 );
-        Assert.assertEquals(200, response.getStatus());
+        assertEquals(200, response.getStatus());
         JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
-        Assert.assertTrue(value.get("name").asString().equals("Apricot"));
-        Assert.assertTrue(value.get("id").asInt() == id);
+        assertEquals("Apricot", value.get("name").asString());
+        assertEquals(id, value.get("id").asInt());
     }
-
 }
-
