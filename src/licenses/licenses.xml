@@ -682,7 +682,7 @@
       </licenses>
     </dependency>
     <dependency>
-      <groupId>io.openshift.boosters</groupId>
+      <groupId>io.openshift.booster</groupId>
       <artifactId>thorntail-rest-http-crud</artifactId>
       <version>13</version>
       fcc
