@@ -38,7 +38,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <version.arquillian-cube>1.18.2</version.arquillian-cube>
-    <version.assertj>3.12.2</version.assertj>
+    <version.assertj>3.13.0</version.assertj>
     <version.awaitility>3.1.6</version.awaitility>
     <version.fabric8-maven-plugin>4.1.0</version.fabric8-maven-plugin>
     <version.h2>1.4.199</version.h2>
