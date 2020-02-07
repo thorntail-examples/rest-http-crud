@@ -44,7 +44,7 @@
     <version.h2>1.4.200</version.h2>
     <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
     <version.maven-war-plugin>3.2.3</version.maven-war-plugin>
-    <version.postgresql>42.2.9</version.postgresql>
+    <version.postgresql>42.2.10</version.postgresql>
     <version.restassured>4.2.0</version.restassured>
     <version.resteasy>3.8.1.Final</version.resteasy>
     <version.thorntail>2.5.0.Final</version.thorntail>
