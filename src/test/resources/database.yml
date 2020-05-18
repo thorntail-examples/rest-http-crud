@@ -11,18 +11,16 @@ items:
     lookupPolicy:
       local: false
     tags:
-    - annotations:
-        openshift.io/imported-from: centos/postgresql-10-centos7
+    - name: latest
       from:
         kind: DockerImage
-        name: centos/postgresql-10-centos7
-      name: latest
+        name: registry.access.redhat.com/rhscl/postgresql-10-rhel7
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
+    name: my-database
     labels:
       app: my-database
-    name: my-database
   spec:
     replicas: 1
     selector:
@@ -35,41 +33,40 @@ items:
           deploymentconfig: my-database
       spec:
         containers:
-        - env:
+        - name: my-database
+          image: ''
+          env:
           - name: POSTGRESQL_DATABASE
             value: my_data
           - name: POSTGRESQL_PASSWORD
             value: secret
           - name: POSTGRESQL_USER
             value: luke
-          image: centos/postgresql-10-centos7
-          name: my-database
           ports:
           - containerPort: 5432
             protocol: TCP
-          resources: {}
           volumeMounts:
-          - mountPath: /var/lib/pgsql/data
-            name: my-database-volume-1
+          - name: my-database-volume
+            mountPath: /var/lib/pgsql/data
         volumes:
-        - emptyDir: {}
-          name: my-database-volume-1
+        - name: my-database-volume
+          emptyDir: {}
     triggers:
     - type: ConfigChange
-    - imageChangeParams:
+    - type: ImageChange
+      imageChangeParams:
         automatic: true
         containerNames:
         - my-database
         from:
           kind: ImageStreamTag
           name: my-database:latest
-      type: ImageChange
 - apiVersion: v1
   kind: Service
   metadata:
+    name: my-database
     labels:
       app: my-database
-    name: my-database
   spec:
     ports:
     - name: 5432-tcp
