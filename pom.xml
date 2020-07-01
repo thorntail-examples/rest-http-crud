@@ -19,7 +19,7 @@
 
   <groupId>io.thorntail.example</groupId>
   <artifactId>thorntail-rest-http-crud</artifactId>
-  <version>17-SNAPSHOT</version>
+  <version>17</version>
   <packaging>war</packaging>
 
   <name>Thorntail - Relational Database Backend</name>
