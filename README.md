@@ -22,12 +22,12 @@ oc apply -f ./.openshiftio/application.yaml
 oc new-app --template=thorntail-rest-http-crud
 ```
 
-### Deployment with the Fabric8 Maven Plugin
+### Deployment with the JKube Maven Plugin
 
 ```bash
 oc apply -f ./.openshiftio/service.database.yaml
 
-mvn clean fabric8:deploy -Popenshift
+mvn clean oc:deploy -Popenshift
 ```
 
 ## Test everything
