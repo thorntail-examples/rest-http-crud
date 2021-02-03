@@ -16,13 +16,13 @@
 package io.thorntail.example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.arquillian.cube.openshift.impl.enricher.AwaitRoute;
-import org.arquillian.cube.openshift.impl.enricher.RouteURL;
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import io.thorntail.openshift.test.AdditionalResources;
+import io.thorntail.openshift.test.OpenShiftTest;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -32,33 +32,31 @@ import javax.json.JsonWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import static io.restassured.RestAssured.delete;
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
-@RunWith(Arquillian.class)
+@OpenShiftTest
+@AdditionalResources("classpath:database.yml")
 public class OpenshiftIT {
-    @RouteURL(value = "${app.name}", path = "/api/fruits")
-    @AwaitRoute(path = "/")
-    private String url;
+    @BeforeAll
+    public static void setUp() {
+        RestAssured.basePath = "/api/fruits";
+    }
 
-    @Before
+    @BeforeEach
     public void setup() {
         String jsonData =
-                given()
-                        .baseUri(url)
-                .when()
+                when()
                         .get()
                 .then()
                         .extract().asString();
 
         JsonArray array = Json.createReader(new StringReader(jsonData)).readArray();
         array.forEach(val -> {
-            given()
-                    .baseUri(url)
-            .when()
+            when()
                     .delete("/" + ((JsonObject) val).getInt("id"))
             .then()
                     .statusCode(204);
@@ -67,9 +65,7 @@ public class OpenshiftIT {
 
     @Test
     public void retrieveNoFruit() {
-        given()
-                .baseUri(url)
-        .when()
+        when()
                 .get()
         .then()
                 .statusCode(200)
@@ -81,9 +77,7 @@ public class OpenshiftIT {
         createFruit("Peach");
 
         String payload =
-                given()
-                        .baseUri(url)
-                .when()
+                when()
                         .get()
                 .then()
                         .statusCode(200)
@@ -98,9 +92,8 @@ public class OpenshiftIT {
         assertThat(obj.getInt("id")).isNotNull().isGreaterThan(0);
 
         given()
-                .baseUri(url)
-        .when()
                 .pathParam("fruitId", obj.getInt("id"))
+        .when()
                 .get("/{fruitId}")
         .then()
                 .statusCode(200)
@@ -111,10 +104,9 @@ public class OpenshiftIT {
     public void createFruit() {
         String payload =
                 given()
-                        .baseUri(url)
-                .when()
                         .contentType(ContentType.JSON)
                         .body(convert(Json.createObjectBuilder().add("name", "Raspberry").build()))
+                .when()
                         .post()
                 .then()
                         .statusCode(201)
@@ -129,10 +121,9 @@ public class OpenshiftIT {
     @Test
     public void createInvalidPayload() {
         given()
-                .baseUri(url)
-        .when()
                 .contentType(ContentType.TEXT)
                 .body("")
+        .when()
                 .post()
         .then()
                 .statusCode(415);
@@ -145,10 +136,9 @@ public class OpenshiftIT {
 
         String payload =
                 given()
-                        .baseUri(url)
-                .when()
                         .contentType(ContentType.JSON)
                         .body(badFruit)
+                .when()
                         .post()
                 .then()
                         .statusCode(422)
@@ -166,9 +156,8 @@ public class OpenshiftIT {
 
         String response =
                 given()
-                        .baseUri(url)
-                .when()
                         .pathParam("fruitId", pear.getId())
+                .when()
                         .get("/{fruitId}")
                 .then()
                         .statusCode(200)
@@ -180,11 +169,10 @@ public class OpenshiftIT {
 
         response =
                 given()
-                        .baseUri(url)
-                .when()
                         .pathParam("fruitId", pear.getId())
                         .contentType(ContentType.JSON)
                         .body(new ObjectMapper().writeValueAsString(pear))
+                .when()
                         .put("/{fruitId}")
                 .then()
                         .statusCode(200)
@@ -202,11 +190,10 @@ public class OpenshiftIT {
         bad.setId(12345678);
 
         given()
-                .baseUri(url)
-        .when()
                 .pathParam("fruitId", bad.getId())
                 .contentType(ContentType.JSON)
                 .body(new ObjectMapper().writeValueAsString(bad))
+        .when()
                 .put("/{fruitId}")
         .then()
                 .statusCode(404)
@@ -216,10 +203,9 @@ public class OpenshiftIT {
     @Test
     public void updateInvalidPayload() {
         given()
-                .baseUri(url)
-        .when()
                 .contentType(ContentType.TEXT)
                 .body("")
+        .when()
                 .post()
         .then()
                 .statusCode(415);
@@ -232,11 +218,10 @@ public class OpenshiftIT {
 
         String payload =
                 given()
-                        .baseUri(url)
-                .when()
                         .pathParam("fruitId", carrot.getId())
                         .contentType(ContentType.JSON)
                         .body(new ObjectMapper().writeValueAsString(carrot))
+                .when()
                         .put("/{fruitId}")
                 .then()
                         .statusCode(422)
@@ -252,16 +237,12 @@ public class OpenshiftIT {
     public void testDelete() throws Exception {
         Fruit orange = createFruit("Orange");
 
-        given()
-                .baseUri(url)
-        .when()
+        when()
                 .delete("/" + orange.getId())
         .then()
                 .statusCode(204);
 
-        given()
-                .baseUri(url)
-        .when()
+        when()
                 .get()
         .then()
                 .statusCode(200)
@@ -270,16 +251,12 @@ public class OpenshiftIT {
 
     @Test
     public void deleteWithUnknownId() {
-        given()
-                .baseUri(url)
-        .when()
+        when()
                 .delete("/unknown")
         .then()
                 .statusCode(404);
 
-        given()
-                .baseUri(url)
-        .when()
+        when()
                 .get()
         .then()
                 .statusCode(200)
@@ -289,10 +266,9 @@ public class OpenshiftIT {
     private Fruit createFruit(String name) throws Exception {
         String payload =
                 given()
-                        .baseUri(url)
-                .when()
                         .contentType(ContentType.JSON)
                         .body(convert(Json.createObjectBuilder().add("name", name).build()))
+                .when()
                         .post()
                 .then()
                         .statusCode(201)
