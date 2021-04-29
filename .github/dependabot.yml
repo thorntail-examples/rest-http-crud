@@ -1,0 +1,31 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: io.thorntail:bom
+    versions:
+    - "< 2.2.1, > 2.2.0.Final"
+  - dependency-name: io.thorntail:thorntail-maven-plugin
+    versions:
+    - "< 2.2.1, > 2.2.0.Final"
+  - dependency-name: org.jboss.resteasy:resteasy-client
+    versions:
+    - "> 3.11.2.Final"
+  - dependency-name: org.jboss.resteasy:resteasy-client
+    versions:
+    - ">= 4.a, < 5"
+  - dependency-name: org.jboss.resteasy:resteasy-jackson2-provider
+    versions:
+    - "> 3.11.2.Final"
+  - dependency-name: org.jboss.resteasy:resteasy-jackson2-provider
+    versions:
+    - ">= 4.a, < 5"
+  - dependency-name: org.postgresql:postgresql
+    versions:
+    - 42.2.18
+    - 42.2.19
+    - 42.2.20
